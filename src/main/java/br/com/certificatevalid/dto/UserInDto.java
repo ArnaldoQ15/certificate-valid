@@ -1,32 +1,29 @@
-package br.com.certificatevalid.model;
+package br.com.certificatevalid.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
-import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Data
-@Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserInDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long userId;
 
-    @Column
     private String userName;
 
-    @Column
     private String password;
 
-    @Column
+    @CPF
     private String documentCpf;
 
-    @Column
+    @Email
     private String email;
 
 }
