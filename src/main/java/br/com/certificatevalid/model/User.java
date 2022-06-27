@@ -3,6 +3,7 @@ package br.com.certificatevalid.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -28,5 +29,10 @@ public class User {
 
     @Column
     private String email;
+
+//    @ManyToOne
+//    @JoinColumn(name = "companyId")
+//    @ToString.Exclude
+//    private Company company;
 
 }

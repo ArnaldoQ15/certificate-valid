@@ -22,6 +22,7 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     public ResponseEntity<UserOutDto> persist(UserInDto dto) {
         User entityNew = new User();
         BeanUtils.copyProperties(dto, entityNew);
