@@ -14,7 +14,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
+
+import static java.util.Locale.*;
 
 @Service
 public class VerificationCodeService {
@@ -29,24 +32,25 @@ public class VerificationCodeService {
     private CompanyRepository companyRepository;
 
     @Autowired
+    private VerificationCodeRepository verificationCodeRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
 
-    public String generateCompanyCode(Company company) {
+    public String generateCompanyCode() {
         VerificationCode entityNew = new VerificationCode();
-        entityNew.setFirstField(RandomString.make(5));
+        entityNew.setFirstField(RandomString.make(10).toUpperCase(ROOT));
         return validateCodeExists(entityNew.getFirstField());
     }
 
-
-    private String validateCodeExists(String code) {
-        if (Boolean.TRUE.equals(companyRepository.existsByCompanyVerificationCode(code))) {
-            code = RandomString.make(5);
-            validateCodeExists(code);
+    private String validateCodeExists(String firstField) {
+        if (Boolean.TRUE.equals(verificationCodeRepository.existsByFirstField(firstField))) {
+            firstField = RandomString.make(10);
+            validateCodeExists(firstField);
         }
-        return code;
+        return firstField;
     }
-
 
     private VerificationCodeDto generateUniqueCode(Long userId) {
         Optional<User> user = userRepository.findById(userId);
