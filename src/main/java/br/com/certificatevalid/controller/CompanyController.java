@@ -1,14 +1,14 @@
 package br.com.certificatevalid.controller;
 
+import br.com.certificatevalid.dto.CompanyInDto;
 import br.com.certificatevalid.dto.CompanyOutDto;
 import br.com.certificatevalid.service.CompanyService;
-import br.com.certificatevalid.service.VerificationCodeService;
+import br.com.certificatevalid.util.ParameterFind;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,9 +20,18 @@ public class CompanyController {
     private CompanyService service;
 
 
-    @PostMapping("/code/new")
-    public ResponseEntity<CompanyOutDto> persist () {
-        return service.persist();
+    @Transactional
+    @PostMapping("/new")
+    public ResponseEntity<CompanyOutDto> persist (@RequestBody @Valid CompanyInDto dto) {
+        return service.persist(dto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CompanyOutDto>> findAll(@RequestParam(value = "page", required = false) Integer page,
+                                                       @RequestParam(value = "size", required = false) Integer size,
+                                                       @RequestParam(value = "name", required = false) String name) {
+        ParameterFind parameterFind = ParameterFind.builder().page(page).size(size).name(name).build();
+        return service.findAll(parameterFind);
     }
 
 }
