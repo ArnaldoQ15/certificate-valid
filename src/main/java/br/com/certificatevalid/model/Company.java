@@ -6,8 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+import static br.com.certificatevalid.util.Constants.EMAIL_INVALID;
+import static br.com.certificatevalid.util.Constants.NOT_BLANK;
 
 @Data
 @Builder
@@ -22,9 +25,15 @@ public class Company {
     private Long companyId;
 
     @Column
-    private String companyVerificationCode;
+    @NotBlank(message = NOT_BLANK)
+    private String companyName;
 
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
-//    private List<User> users = new ArrayList<>();
+    @Column
+    @NotBlank(message = NOT_BLANK)
+    @Email(message = EMAIL_INVALID)
+    private String contactEmail;
+
+    @Column
+    private String companyVerificationCode;
 
 }
