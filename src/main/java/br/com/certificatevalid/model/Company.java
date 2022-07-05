@@ -21,19 +21,17 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long companyId;
 
-    @Column
     @NotBlank(message = NOT_BLANK)
     private String companyName;
 
-    @Column
     @NotBlank(message = NOT_BLANK)
     @Email(message = EMAIL_INVALID)
     private String contactEmail;
 
-    @Column
     private String companyVerificationCode;
+
+    private Long countUser;
 
 }
