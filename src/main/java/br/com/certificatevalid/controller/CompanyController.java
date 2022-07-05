@@ -34,4 +34,9 @@ public class CompanyController {
         return service.findAll(parameterFind);
     }
 
+    @GetMapping("/{companyId}")
+    public ResponseEntity<CompanyOutDto> findId(@PathVariable Long companyId) {
+        return service.findId(companyId);
+    }
+
 }
