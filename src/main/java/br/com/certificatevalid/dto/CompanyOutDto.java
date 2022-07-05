@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 public class CompanyOutDto {
 
     private Long companyId;
+
     private String companyName;
+
     private String companyVerificationCode;
+
+    private Long countUser;
 
 }
