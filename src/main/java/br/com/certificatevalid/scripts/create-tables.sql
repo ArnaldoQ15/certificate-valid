@@ -2,7 +2,8 @@ CREATE TABLE company (
         company_id SERIAL PRIMARY KEY,
         company_name VARCHAR(255) NOT NULL,
         contact_email VARCHAR(255) NOT NULL,
-        company_verification_code VARCHAR(10)
+        company_verification_code VARCHAR(10),
+        count_user INT
 );
 
 CREATE TABLE user_system (
