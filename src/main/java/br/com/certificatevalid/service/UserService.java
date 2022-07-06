@@ -2,13 +2,12 @@ package br.com.certificatevalid.service;
 
 import br.com.certificatevalid.dto.*;
 import br.com.certificatevalid.exception.BadRequestException;
-import br.com.certificatevalid.exception.NotFoundException;
 import br.com.certificatevalid.model.Company;
 import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.repository.CompanyRepository;
 import br.com.certificatevalid.repository.UserRepository;
-import br.com.certificatevalid.util.Constants;
 import br.com.certificatevalid.util.ParameterFind;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,12 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static br.com.certificatevalid.enums.DataStatusEnum.ACTIVE;
+import static br.com.certificatevalid.enums.DataStatusEnum.*;
 import static br.com.certificatevalid.util.Constants.*;
 import static java.util.Objects.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
@@ -113,13 +110,30 @@ public class UserService extends BaseService {
         return sha256Hex(password);
     }
 
-    public ResponseEntity<UserOutDto> resetPassword(Long userId, UserResetPasswordDto dto) {
+    public ResponseEntity<UserOutResetPasswordDto> resetPassword(Long userId, UserInResetPasswordDto dto) {
         User user = findUser(userId);
         if (!dto.getDocumentCpf().equals(user.getDocumentCpf()) || !dto.getEmail().equalsIgnoreCase(user.getEmail()))
             throw new BadRequestException(INVALID_CREDENTIALS);
 
-        user.setPassword(validPassword(dto.getNewPassword()));
-        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(repository.save(user), UserOutDto.class));
+        String tempPassword = RandomString.make(15);
+        user.setPassword(tempPassword);
+        user.setDataStatus(RESET_PASSWORD);
+        repository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(UserOutResetPasswordDto.builder()
+                .userId(user.getUserId())
+                .userName(user.getUsername())
+                .email(user.getEmail())
+                .dataStatus(user.getDataStatus())
+                .companyName(user.getCompany().getCompanyName())
+                .temporaryPassword(tempPassword)
+                .build());
+    }
+
+    public ResponseEntity<Void> delete(Long userId) {
+        User user = findUser(userId);
+        user.setDataStatus(INACTIVE);
+        repository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

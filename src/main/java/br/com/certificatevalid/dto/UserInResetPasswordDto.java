@@ -13,7 +13,7 @@ import static br.com.certificatevalid.util.Constants.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResetPasswordDto {
+public class UserInResetPasswordDto {
 
     @NotBlank(message = NOT_BLANK)
     @CPF(message = CPF_INVALID)
@@ -22,8 +22,5 @@ public class UserResetPasswordDto {
     @NotBlank(message = NOT_BLANK)
     @Email(message = EMAIL_INVALID)
     private String email;
-
-    @NotBlank(message = NOT_BLANK)
-    private String newPassword;
 
 }

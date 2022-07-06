@@ -50,9 +50,14 @@ public class UserController {
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<UserOutDto> resetPassword(@RequestParam Long userId,
-                                                    @RequestBody @Valid UserResetPasswordDto dto) {
+    public ResponseEntity<UserOutResetPasswordDto> resetPassword(@RequestParam Long userId,
+                                                    @RequestBody @Valid UserInResetPasswordDto dto) {
         return service.resetPassword(userId, dto);
+    }
+
+    @DeleteMapping("/{userId}/delete")
+    public ResponseEntity<Void> delete(@PathVariable Long userId) {
+        return service.delete(userId);
     }
 
 }
