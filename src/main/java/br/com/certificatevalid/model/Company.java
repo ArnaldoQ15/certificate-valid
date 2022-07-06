@@ -34,4 +34,6 @@ public class Company {
 
     private Long countUser;
 
+    private String companyPassword;
+
 }
