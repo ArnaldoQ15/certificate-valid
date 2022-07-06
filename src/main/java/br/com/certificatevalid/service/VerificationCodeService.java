@@ -22,25 +22,15 @@ public class VerificationCodeService extends BaseService {
 
     @Autowired
     private VerificationCodeRepository repository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private CompanyRepository companyRepository;
-
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
-
     @Autowired
     private ModelMapper modelMapper;
 
-
-    public String generateCompanyCode() {
-        VerificationCode entityNew = new VerificationCode();
-        entityNew.setFirstField(RandomString.make(10).toUpperCase(ROOT));
-        return validateCodeExists(entityNew.getFirstField());
-    }
 
     private String validateCodeExists(String firstField) {
         if (Boolean.TRUE.equals(verificationCodeRepository.existsByFirstField(firstField))) {

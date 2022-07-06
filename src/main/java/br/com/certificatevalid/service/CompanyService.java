@@ -42,7 +42,7 @@ public class CompanyService extends BaseService {
 
         Company entityNew = modelMapper.map(dto, Company.class);
         entityNew.setCountUser(0L);
-        entityNew.setCompanyVerificationCode(verificationCodeService.generateCompanyCode());
+        entityNew.setCompanyVerificationCode(generateVerificationCode());
         entityNew.setCompanyPassword(generateCompanyPassword());
 
         Company entityPersisted = new Company();
@@ -72,8 +72,7 @@ public class CompanyService extends BaseService {
     }
 
     public ResponseEntity<CompanyOutDto> findId(Long companyId) {
-        return ResponseEntity.ok(modelMapper.map(repository.findById(companyId).orElseThrow(() ->
-                new NotFoundException(COMPANY_NOT_FOUND)), CompanyOutDto.class));
+        return ResponseEntity.ok(modelMapper.map(findCompany(companyId), CompanyOutDto.class));
     }
 
     public ResponseEntity<CompanyOutDto> update(Long companyId, CompanyUpdateDto dto) {
@@ -100,6 +99,5 @@ public class CompanyService extends BaseService {
         company.setCompanyPassword(newPassword);
         return ResponseEntity.ok(modelMapper.map(company, CompanyOutCreateDto.class));
     }
-
 
 }

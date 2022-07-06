@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static br.com.certificatevalid.util.Constants.NOT_BLANK;
 
 @Data
 @Builder
@@ -16,32 +19,30 @@ import javax.persistence.*;
 public class VerificationCode {
 
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeId;
 
-    @Column
     @Length(max = 10)
     private String firstField;
 
-    @Column
     @Length(max = 10)
     private String secondField;
 
-    @Column
     @Length(max = 10)
     private String thirdField;
 
-    @Column
     @Length(max = 10)
     private String fourthField;
 
-    @Column
     @Length(max = 10)
     private String firthField;
 
-    @Column
     @Length(max = 50)
     private String fullField;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    @NotNull(message = NOT_BLANK)
+    private User user;
 
 }

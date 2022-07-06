@@ -41,7 +41,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "companyId")
-    @ToString.Exclude
     private Company company;
 
     @NotNull(message = NOT_BLANK)
