@@ -42,7 +42,7 @@ public class CompanyService extends BaseService {
 
         Company entityNew = modelMapper.map(dto, Company.class);
         entityNew.setCountUser(0L);
-        entityNew.setCompanyVerificationCode(generateVerificationCode());
+        entityNew.setCompanyVerificationCode(generateCompanyVerificationCode());
         entityNew.setCompanyPassword(generateCompanyPassword());
 
         Company entityPersisted = new Company();

@@ -47,6 +47,7 @@ public class UserService extends BaseService {
         validateEmailExists(entityNew.getEmail());
         entityNew.setPassword(validPassword(entityNew.getPassword()));
         entityNew.setDataStatus(ACTIVE);
+        entityNew.setUserVerificationCode(generateUserVerificationCode() + generateUserVerificationCode());
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(repository.save(entityNew), UserOutDto.class));
     }
 

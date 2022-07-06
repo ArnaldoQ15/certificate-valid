@@ -47,4 +47,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private DataStatusEnum dataStatus;
 
+    @NotNull(message = NOT_BLANK)
+    private String userVerificationCode;
+
 }

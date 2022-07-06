@@ -42,7 +42,7 @@ public class CourseService extends BaseService {
         Course entityNew = Course.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
-                .courseVerificationCode(generateVerificationCode())
+                .courseVerificationCode(generateCourseVerificationCode())
                 .company(findCompany(dto.getCompanyId()))
                 .dataStatus(ACTIVE)
                 .finishDate(dto.getFinishDate())

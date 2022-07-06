@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import static br.com.certificatevalid.util.Constants.NOT_BLANK;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Builder
@@ -25,7 +25,7 @@ public class VerificationCode {
     @Length(max = 10)
     private String firstField;
 
-    @Length(max = 10)
+    @Length(max = 20)
     private String secondField;
 
     @Length(max = 10)
@@ -37,12 +37,7 @@ public class VerificationCode {
     @Length(max = 10)
     private String firthField;
 
-    @Length(max = 50)
+    @Length(max = 60)
     private String fullField;
-
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    @NotNull(message = NOT_BLANK)
-    private User user;
 
 }

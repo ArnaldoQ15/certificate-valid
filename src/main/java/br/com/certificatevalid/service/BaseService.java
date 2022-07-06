@@ -7,6 +7,7 @@ import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.repository.CompanyRepository;
 import br.com.certificatevalid.repository.CourseRepository;
 import br.com.certificatevalid.repository.UserRepository;
+import br.com.certificatevalid.repository.VerificationCodeRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,7 +26,7 @@ public class BaseService {
     private CourseRepository courseRepository;
 
 
-    /**Método para encontrar um usuário no banco de dados a partir do ID.*/
+    /**Método para encontrar um user no banco de dados a partir do ID.*/
     public User findUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty())
@@ -33,7 +34,15 @@ public class BaseService {
         return user.get();
     }
 
-    /**Método para encontrar uma companhia no banco de dados a partir do ID.*/
+    /**Método para gerar um código único de validação com 10 dígitos para USER.*/
+    public String generateUserVerificationCode() {
+        String code = RandomString.make(10).toUpperCase(ROOT);
+        if (Boolean.TRUE.equals(userRepository.existsByUserVerificationCode(code)))
+            generateUserVerificationCode();
+        return code;
+    }
+
+    /**Método para encontrar uma company no banco de dados a partir do ID.*/
     public Company findCompany(Long companyId) {
         Optional<Company> company = companyRepository.findById(companyId);
         if (company.isEmpty())
@@ -41,7 +50,15 @@ public class BaseService {
         return company.get();
     }
 
-    /**Método para encontrar um curso no banco de dados a partir do ID.*/
+    /**Método para gerar um código único de validação com 10 dígitos para COMPANY.*/
+    public String generateCompanyVerificationCode() {
+        String code = RandomString.make(10).toUpperCase(ROOT);
+        if (Boolean.TRUE.equals(companyRepository.existsByCompanyVerificationCode(code)))
+            generateCompanyVerificationCode();
+        return code;
+    }
+
+    /**Método para encontrar um course no banco de dados a partir do ID.*/
     public Course findCourse(Long courseId) {
         Optional<Course> course = courseRepository.findById(courseId);
         if (course.isEmpty())
@@ -49,9 +66,12 @@ public class BaseService {
         return course.get();
     }
 
-    /**Método para gerar um código único de validação com 10 dígitos.*/
-    public String generateVerificationCode() {
-        return RandomString.make(10).toUpperCase(ROOT);
+    /**Método para gerar um código único de validação com 10 dígitos para COURSE.*/
+    public String generateCourseVerificationCode() {
+        String code = RandomString.make(10).toUpperCase(ROOT);
+        if (Boolean.TRUE.equals(courseRepository.existsByCourseVerificationCode(code)))
+            generateCourseVerificationCode();
+        return code;
     }
 
 }
