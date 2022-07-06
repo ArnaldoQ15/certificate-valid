@@ -15,5 +15,9 @@ public class Constants {
     public static final String CANT_UPDATE_COMPANY = "You cannot update this company. Check past data.";
     public static final String WEAK_PASSWORD = "Your password is weak.";
     public static final String INVALID_CREDENTIALS = "Invalid credentials.";
+    public static final String COURSE_TITLE_IN_USE = "There is already a course registered with this title.";
+    public static final String COURSE_EXPIRED = "Course expired. Cant update.";
+    public static final String INVALID_COURSE_DATE = "You cant change finish to before now.";
+    public static final String COURSE_NOT_FOUND = "Course not found.";
 
 }

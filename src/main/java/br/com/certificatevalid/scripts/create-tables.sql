@@ -15,6 +15,7 @@ CREATE TABLE user_system (
         document_cpf VARCHAR(255),
         data_status VARCHAR(30),
         company_id SERIAL NULL,
+        FOREIGN KEY (company_id) REFERENCES company(company_id)
 );
 
 CREATE TABLE verification_code (
@@ -28,7 +29,13 @@ CREATE TABLE verification_code (
         appointment_id SERIAL
 );
 
-ALTER TABLE user_system
-        ADD CONSTRAINT fk_company_id
-        FOREIGN KEY (company_id)
-        REFERENCES company;
+CREATE TABLE course (
+        course_id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description VARCHAR(255) NOT NULL,
+        course_verification_code VARCHAR(255) NOT NULL,
+        company_id SERIAL NOT NULL,
+        data_status VARCHAR(255) NOT NULL,
+        finish_date TIMESTAMP NOT NULL,
+        FOREIGN KEY (company_id) REFERENCES company(company_id)
+);
