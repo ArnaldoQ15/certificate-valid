@@ -13,6 +13,7 @@ CREATE TABLE user_system (
         password VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
         document_cpf VARCHAR(255),
+        data_status VARCHAR(30),
         company_id SERIAL NULL,
 );
 
