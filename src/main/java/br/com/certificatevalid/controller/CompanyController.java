@@ -1,7 +1,6 @@
 package br.com.certificatevalid.controller;
 
-import br.com.certificatevalid.dto.CompanyInDto;
-import br.com.certificatevalid.dto.CompanyOutDto;
+import br.com.certificatevalid.dto.*;
 import br.com.certificatevalid.service.CompanyService;
 import br.com.certificatevalid.util.ParameterFind;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class CompanyController {
 
     @Transactional
     @PostMapping("/new")
-    public ResponseEntity<CompanyOutDto> persist (@RequestBody @Valid CompanyInDto dto) {
+    public ResponseEntity<CompanyOutCreateDto> persist (@RequestBody @Valid CompanyInDto dto) {
         return service.persist(dto);
     }
 
@@ -37,6 +36,16 @@ public class CompanyController {
     @GetMapping("/{companyId}")
     public ResponseEntity<CompanyOutDto> findId(@PathVariable Long companyId) {
         return service.findId(companyId);
+    }
+
+    @PutMapping("/{companyId}/update")
+    public ResponseEntity<CompanyOutDto> update(@PathVariable Long companyId, @RequestBody @Valid CompanyUpdateDto dto) {
+        return service.update(companyId, dto);
+    }
+
+    @PutMapping("/{companyId}/reset-password")
+    public ResponseEntity<CompanyOutCreateDto> resetPassword(@PathVariable Long companyId, @RequestBody @Valid CompanyInDto dto) {
+        return service.resetPassword(companyId, dto);
     }
 
 }
