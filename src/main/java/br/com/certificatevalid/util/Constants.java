@@ -12,5 +12,7 @@ public class Constants {
     public static final String MALFORMED_JSON = "Malformed JSON request.";
     public static final String INVALID_FIELDS = "One or more fields are invalid. Try again.";
     public static final String CONTACT_EMAIL_IN_USE = "There is already a company registered with this contact email.";
+    public static final String CANT_UPDATE_COMPANY = "You cannot update this company. Check past data.";
+    public static final String WEAK_PASSWORD = "Your password is weak.";
 
 }
