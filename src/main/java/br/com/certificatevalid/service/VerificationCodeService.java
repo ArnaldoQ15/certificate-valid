@@ -2,7 +2,6 @@ package br.com.certificatevalid.service;
 
 import br.com.certificatevalid.dto.VerificationCodeDto;
 import br.com.certificatevalid.exception.NotFoundException;
-import br.com.certificatevalid.model.Company;
 import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.model.VerificationCode;
 import br.com.certificatevalid.repository.CompanyRepository;
@@ -14,13 +13,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
 import java.util.Optional;
 
-import static java.util.Locale.*;
+import static java.util.Locale.ROOT;
 
 @Service
-public class VerificationCodeService {
+public class VerificationCodeService extends BaseService {
 
     @Autowired
     private VerificationCodeRepository repository;

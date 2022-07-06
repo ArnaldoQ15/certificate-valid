@@ -3,6 +3,7 @@ package br.com.certificatevalid.service;
 import br.com.certificatevalid.dto.CompanyOutDto;
 import br.com.certificatevalid.dto.UserInDto;
 import br.com.certificatevalid.dto.UserOutDto;
+import br.com.certificatevalid.dto.UserUpdateDto;
 import br.com.certificatevalid.exception.BadRequestException;
 import br.com.certificatevalid.exception.NotFoundException;
 import br.com.certificatevalid.model.Company;
@@ -24,20 +25,22 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static br.com.certificatevalid.util.Constants.*;
 import static java.util.Objects.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Service
-public class UserService {
+public class UserService extends BaseService {
 
     @Autowired
     private UserRepository repository;
-
     @Autowired
     private CompanyRepository companyRepository;
-
+    @Autowired
+    private CompanyService companyService;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -47,7 +50,7 @@ public class UserService {
 
         validateCpfExists(entityNew.getDocumentCpf());
         validateEmailExists(entityNew.getEmail());
-        entityNew.setPassword(sha256Hex(entityNew.getPassword()));
+        entityNew.setPassword(validPassword(entityNew.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(repository.save(entityNew), UserOutDto.class));
     }
 
@@ -56,14 +59,15 @@ public class UserService {
             throw new BadRequestException(CPF_IN_USE);
     }
 
-    public void validateEmailExists(String email) {
+    public String validateEmailExists(String email) {
         if (Boolean.TRUE.equals(repository.existsByEmail(email)))
             throw new BadRequestException(EMAIL_IN_USE);
+        return email;
     }
 
     public ResponseEntity<UserOutDto> addCompany(Long userId, Long companyId) {
         User user = findUser(userId);
-        Company company = findCompany(companyId);
+        Company company = companyService.findCompany(companyId);
         user.setCompany(company);
         company.setCountUser(company.getCountUser()+1);
         companyRepository.save(company);
@@ -85,18 +89,28 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(findUser(userId), UserOutDto.class));
     }
 
-    private User findUser(Long userId) {
-        Optional<User> user = repository.findById(userId);
-        if (user.isEmpty())
-            throw new NotFoundException(USER_NOT_FOUND);
-        return user.get();
+    public ResponseEntity<UserOutDto> update(Long userId, UserUpdateDto dto) {
+        User user = findUser(userId);
+        user.setEmail(isNull(dto.getEmail()) ? user.getEmail() : validateEmailExists(dto.getEmail()));
+        user.setUsername(isNull(dto.getUsername()) ? user.getUsername() : dto.getUsername());
+        user.setPassword(isNull(dto.getPassword()) ? user.getPassword() : validPassword(dto.getPassword()));
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(repository.save(user), UserOutDto.class));
     }
 
-    private Company findCompany(Long companyId) {
-        Optional<Company> company = companyRepository.findById(companyId);
-        if (company.isEmpty())
-            throw new NotFoundException(COMPANY_NOT_FOUND);
-        return company.get();
+    private String validPassword(String password) {
+        String regex = "^(?=.*[0-9])"
+                + "(?=.*[a-z])(?=.*[A-Z])"
+                + "(?=.*[@#$%^&+=])"
+                + "(?=\\S+$).{8,20}$";
+
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(password);
+        boolean matches = m.matches();
+
+        if(!matches)
+            throw new BadRequestException(WEAK_PASSWORD);
+
+        return sha256Hex(password);
     }
 
 }
