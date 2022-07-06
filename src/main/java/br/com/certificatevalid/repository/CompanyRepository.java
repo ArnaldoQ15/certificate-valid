@@ -15,4 +15,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("SELECT c FROM Company c WHERE LOWER(c.companyName) LIKE :companyName%")
     Page<Company> findByCompanyName(String companyName, Pageable pageRequest);
 
+    Boolean existsByCompanyPassword(String companyPassword);
+
 }
