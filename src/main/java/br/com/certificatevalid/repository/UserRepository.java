@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE :username%")
     Page<User> findByUsername(String username, Pageable pageRequest);
 
+    Boolean existsByUserVerificationCode(String userVerificationCode);
+
 }

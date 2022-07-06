@@ -3,7 +3,7 @@ CREATE TABLE company (
         company_name VARCHAR(255) NOT NULL,
         contact_email VARCHAR(255) NOT NULL,
         company_verification_code VARCHAR(10),
-        count_user INT,
+        count_user INTEGER,
         company_password VARCHAR(255)
 );
 
@@ -14,19 +14,19 @@ CREATE TABLE user_system (
         email VARCHAR(255) NOT NULL,
         document_cpf VARCHAR(255),
         data_status VARCHAR(30),
-        company_id SERIAL NULL,
+        company_id INTEGER,
+        user_verification_code VARCHAR(20) NOT NULL,
         FOREIGN KEY (company_id) REFERENCES company(company_id)
 );
 
 CREATE TABLE verification_code (
         code_id SERIAL PRIMARY KEY,
-        first_field VARCHAR(10),
-        second_field VARCHAR(10),
-        third_field VARCHAR(10),
-        fourth_field VARCHAR(10),
-        firth_field VARCHAR(10),
-        full_field VARCHAR(50),
-        appointment_id SERIAL
+        first_field VARCHAR(10) NOT NULL,
+        second_field VARCHAR(20) NOT NULL,
+        third_field VARCHAR(10) NOT NULL,
+        fourth_field VARCHAR(10) NOT NULL,
+        firth_field VARCHAR(10) NOT NULL,
+        full_field VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE course (
@@ -34,8 +34,18 @@ CREATE TABLE course (
         title VARCHAR(255) NOT NULL,
         description VARCHAR(255) NOT NULL,
         course_verification_code VARCHAR(255) NOT NULL,
-        company_id SERIAL NOT NULL,
+        company_id INTEGER NOT NULL,
         data_status VARCHAR(255) NOT NULL,
         finish_date TIMESTAMP NOT NULL,
         FOREIGN KEY (company_id) REFERENCES company(company_id)
+);
+
+CREATE TABLE certificate (
+        certificate_id SERIAL PRIMARY KEY,
+        course_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        verification_code_id INTEGER NOT NULL,
+        FOREIGN KEY (course_id) REFERENCES course(course_id),
+        FOREIGN KEY (user_id) REFERENCES user_system(user_id),
+        FOREIGN KEY (verification_code_id) REFERENCES verification_code(code_id)
 );

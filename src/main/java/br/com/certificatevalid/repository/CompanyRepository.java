@@ -17,4 +17,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     Boolean existsByCompanyPassword(String companyPassword);
 
+    Boolean existsByCompanyVerificationCode(String companyVerificationCode);
+
 }
