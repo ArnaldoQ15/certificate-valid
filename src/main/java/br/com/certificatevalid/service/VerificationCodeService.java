@@ -22,41 +22,22 @@ public class VerificationCodeService extends BaseService {
 
     @Autowired
     private VerificationCodeRepository repository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
-    @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
-    @Autowired
-    private ModelMapper modelMapper;
 
 
-    private String validateCodeExists(String firstField) {
-        if (Boolean.TRUE.equals(verificationCodeRepository.existsByFirstField(firstField))) {
-            firstField = RandomString.make(10);
-            validateCodeExists(firstField);
-        }
-        return firstField;
-    }
-
-    private VerificationCodeDto generateUniqueCode(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty())
-            throw new NotFoundException(Constants.USER_NOT_FOUND);
-
-        VerificationCode entityNew = new VerificationCode();
-
-        entityNew.builder()
-                .firstField(RandomString.make(5))
-                .secondField(RandomString.make(5))
-                .thirdField(RandomString.make(5))
-                .fourthField(RandomString.make(5))
-                .firthField(RandomString.make(5))
+    public VerificationCode generateUniqueCode(String companyCode, String userCode, String courseCode) {
+        VerificationCode entityNew = VerificationCode.builder()
+                .firstField(companyCode)
+                .secondField(userCode)
+                .thirdField(courseCode)
+                .fourthField(RandomString.make(10).toUpperCase(ROOT))
+                .firthField(RandomString.make(10).toUpperCase(ROOT))
                 .build();
 
-        VerificationCodeDto teste = new VerificationCodeDto();
-        return teste;
+        entityNew.setFullField(entityNew.getFirstField() + entityNew.getSecondField() +
+                entityNew.getThirdField() + entityNew.getFourthField() + entityNew.getFirthField());
+
+        repository.save(entityNew);
+        return entityNew;
     }
 
 }
