@@ -3,7 +3,8 @@ CREATE TABLE company (
         company_name VARCHAR(255) NOT NULL,
         contact_email VARCHAR(255) NOT NULL,
         company_verification_code VARCHAR(10),
-        count_user INT
+        count_user INT,
+        company_password VARCHAR(255)
 );
 
 CREATE TABLE user_system (
