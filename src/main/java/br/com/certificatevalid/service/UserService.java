@@ -1,9 +1,6 @@
 package br.com.certificatevalid.service;
 
-import br.com.certificatevalid.dto.CompanyOutDto;
-import br.com.certificatevalid.dto.UserInDto;
-import br.com.certificatevalid.dto.UserOutDto;
-import br.com.certificatevalid.dto.UserUpdateDto;
+import br.com.certificatevalid.dto.*;
 import br.com.certificatevalid.exception.BadRequestException;
 import br.com.certificatevalid.exception.NotFoundException;
 import br.com.certificatevalid.model.Company;
@@ -28,6 +25,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static br.com.certificatevalid.enums.DataStatusEnum.ACTIVE;
 import static br.com.certificatevalid.util.Constants.*;
 import static java.util.Objects.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
@@ -51,6 +49,7 @@ public class UserService extends BaseService {
         validateCpfExists(entityNew.getDocumentCpf());
         validateEmailExists(entityNew.getEmail());
         entityNew.setPassword(validPassword(entityNew.getPassword()));
+        entityNew.setDataStatus(ACTIVE);
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(repository.save(entityNew), UserOutDto.class));
     }
 
@@ -94,6 +93,7 @@ public class UserService extends BaseService {
         user.setEmail(isNull(dto.getEmail()) ? user.getEmail() : validateEmailExists(dto.getEmail()));
         user.setUsername(isNull(dto.getUsername()) ? user.getUsername() : dto.getUsername());
         user.setPassword(isNull(dto.getPassword()) ? user.getPassword() : validPassword(dto.getPassword()));
+        user.setDataStatus(isNull(dto.getDataStatus()) ? user.getDataStatus() : dto.getDataStatus());
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(repository.save(user), UserOutDto.class));
     }
 
@@ -111,6 +111,15 @@ public class UserService extends BaseService {
             throw new BadRequestException(WEAK_PASSWORD);
 
         return sha256Hex(password);
+    }
+
+    public ResponseEntity<UserOutDto> resetPassword(Long userId, UserResetPasswordDto dto) {
+        User user = findUser(userId);
+        if (!dto.getDocumentCpf().equals(user.getDocumentCpf()) || !dto.getEmail().equalsIgnoreCase(user.getEmail()))
+            throw new BadRequestException(INVALID_CREDENTIALS);
+
+        user.setPassword(validPassword(dto.getNewPassword()));
+        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(repository.save(user), UserOutDto.class));
     }
 
 }

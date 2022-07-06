@@ -1,5 +1,6 @@
 package br.com.certificatevalid.dto;
 
+import br.com.certificatevalid.enums.DataStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +17,7 @@ public class UserUpdateDto {
     private String password;
 
     private String email;
+
+    private DataStatusEnum dataStatus;
 
 }

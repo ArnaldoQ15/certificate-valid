@@ -1,9 +1,6 @@
 package br.com.certificatevalid.controller;
 
-import br.com.certificatevalid.dto.CompanyInDto;
-import br.com.certificatevalid.dto.UserInDto;
-import br.com.certificatevalid.dto.UserOutDto;
-import br.com.certificatevalid.dto.UserUpdateDto;
+import br.com.certificatevalid.dto.*;
 import br.com.certificatevalid.service.UserService;
 import br.com.certificatevalid.util.ParameterFind;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,12 @@ public class UserController {
     @PutMapping("/{userId}/update")
     public ResponseEntity<UserOutDto> update(@PathVariable Long userId, @RequestBody UserUpdateDto dto) {
         return service.update(userId, dto);
+    }
+
+    @PutMapping("/reset-password")
+    public ResponseEntity<UserOutDto> resetPassword(@RequestParam Long userId,
+                                                    @RequestBody @Valid UserResetPasswordDto dto) {
+        return service.resetPassword(userId, dto);
     }
 
 }
