@@ -1,8 +1,10 @@
 package br.com.certificatevalid.service;
 
-import br.com.certificatevalid.dto.*;
+import br.com.certificatevalid.dto.CompanyInDto;
+import br.com.certificatevalid.dto.CompanyOutCreateDto;
+import br.com.certificatevalid.dto.CompanyOutDto;
+import br.com.certificatevalid.dto.CompanyUpdateDto;
 import br.com.certificatevalid.exception.BadRequestException;
-import br.com.certificatevalid.exception.NotFoundException;
 import br.com.certificatevalid.model.Company;
 import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.repository.CompanyRepository;
@@ -21,8 +23,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Locale;
 
-import static br.com.certificatevalid.util.Constants.*;
-import static java.util.Objects.*;
+import static br.com.certificatevalid.util.Constants.CANT_UPDATE_COMPANY;
+import static br.com.certificatevalid.util.Constants.CONTACT_EMAIL_IN_USE;
+import static java.util.Objects.isNull;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Service
@@ -30,8 +33,6 @@ public class CompanyService extends BaseService {
 
     @Autowired
     private CompanyRepository repository;
-    @Autowired
-    private VerificationCodeService verificationCodeService;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -49,7 +50,6 @@ public class CompanyService extends BaseService {
         BeanUtils.copyProperties(entityNew, entityPersisted);
         entityPersisted.setCompanyPassword(sha256Hex(entityNew.getCompanyPassword()));
         repository.save(entityPersisted);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(entityNew, CompanyOutCreateDto.class));
     }
 
@@ -67,7 +67,6 @@ public class CompanyService extends BaseService {
         Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("companyName").ascending());
         Page<Company> companies = isNull(parameterFind.getName()) || parameterFind.getName().isBlank() ? repository.findAll(pageRequest) :
                 repository.findByCompanyName(parameterFind.getName().toLowerCase(Locale.ROOT), pageRequest);
-
         return ResponseEntity.ok(companies.map(company -> modelMapper.map(company, CompanyOutDto.class)));
     }
 
@@ -83,7 +82,6 @@ public class CompanyService extends BaseService {
 
         company.setCompanyName(isNull(dto.getCompanyName()) || dto.getCompanyName().isBlank() ? company.getCompanyName() : dto.getCompanyName());
         company.setContactEmail(isNull(dto.getContactEmail()) || dto.getCompanyName().isBlank() ? company.getContactEmail() : dto.getContactEmail());
-
         return ResponseEntity.ok(modelMapper.map(repository.save(company), CompanyOutDto.class));
     }
 
@@ -95,7 +93,6 @@ public class CompanyService extends BaseService {
         String newPassword = company.getCompanyPassword();
         company.setCompanyPassword(sha256Hex(newPassword));
         repository.save(company);
-
         company.setCompanyPassword(newPassword);
         return ResponseEntity.ok(modelMapper.map(company, CompanyOutCreateDto.class));
     }

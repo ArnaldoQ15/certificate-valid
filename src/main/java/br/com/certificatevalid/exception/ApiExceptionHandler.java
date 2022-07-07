@@ -3,6 +3,7 @@ package br.com.certificatevalid.exception;
 import br.com.certificatevalid.dto.ExceptionArgumentNotValidDto;
 import br.com.certificatevalid.dto.ExceptionDto;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private MessageSource messageSource;
 
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionDto> notFoundException(NotFoundException exception){
         return ResponseEntity.status(NOT_FOUND).body(
@@ -50,7 +52,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex,
+                                                                  @NotNull HttpHeaders headers,
+                                                                  @NotNull HttpStatus status,
+                                                                  @NotNull WebRequest request) {
         return new ResponseEntity(ExceptionDto.builder()
                 .status(status)
                 .timestamp(now())
@@ -59,13 +64,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NotNull MethodArgumentNotValidException ex,
+                                                                  @NotNull HttpHeaders headers, @NotNull HttpStatus status,
+                                                                  @NotNull WebRequest request) {
         List<ExceptionArgumentNotValidDto.Warnings> warnings = new ArrayList<>();
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
             String name = ((FieldError) error).getField();
             String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
-
             warnings.add(new ExceptionArgumentNotValidDto.Warnings(name, message));
         }
 
@@ -75,7 +81,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .message(INVALID_FIELDS)
                 .warnings(warnings)
                 .build();
-
         return handleExceptionInternal(ex, exception, headers, status, request);
     }
 

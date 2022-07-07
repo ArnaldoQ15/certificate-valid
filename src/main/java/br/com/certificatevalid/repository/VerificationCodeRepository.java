@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VerificationCodeRepository extends JpaRepository<VerificationCode, Long> {
 
-    Boolean existsByFirstField(String firstField);
+    Boolean existsByFullField(String fullField);
 
 }

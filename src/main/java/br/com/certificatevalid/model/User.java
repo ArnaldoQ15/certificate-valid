@@ -4,7 +4,6 @@ import br.com.certificatevalid.enums.DataStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;

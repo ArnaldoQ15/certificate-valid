@@ -1,6 +1,5 @@
 package br.com.certificatevalid.repository;
 
-import br.com.certificatevalid.model.Company;
 import br.com.certificatevalid.model.Course;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

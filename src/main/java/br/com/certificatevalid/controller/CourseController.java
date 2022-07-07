@@ -1,6 +1,8 @@
 package br.com.certificatevalid.controller;
 
-import br.com.certificatevalid.dto.*;
+import br.com.certificatevalid.dto.CourseInDto;
+import br.com.certificatevalid.dto.CourseOutDto;
+import br.com.certificatevalid.dto.CourseUpdateDto;
 import br.com.certificatevalid.service.CourseService;
 import br.com.certificatevalid.util.ParameterFind;
 import org.springframework.beans.factory.annotation.Autowired;

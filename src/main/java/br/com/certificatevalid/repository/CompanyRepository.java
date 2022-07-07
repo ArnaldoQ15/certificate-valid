@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
-    Boolean existsByContactEmail(String contactEmail);
-
     @Query("SELECT c FROM Company c WHERE LOWER(c.companyName) LIKE :companyName%")
     Page<Company> findByCompanyName(String companyName, Pageable pageRequest);
+
+    Boolean existsByContactEmail(String contactEmail);
 
     Boolean existsByCompanyPassword(String companyPassword);
 

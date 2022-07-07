@@ -7,7 +7,6 @@ import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.repository.CompanyRepository;
 import br.com.certificatevalid.repository.CourseRepository;
 import br.com.certificatevalid.repository.UserRepository;
-import br.com.certificatevalid.repository.VerificationCodeRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 

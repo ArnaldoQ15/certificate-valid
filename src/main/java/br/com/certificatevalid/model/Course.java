@@ -1,12 +1,14 @@
 package br.com.certificatevalid.model;
 
 import br.com.certificatevalid.enums.CourseDataStatusEnum;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import java.time.OffsetDateTime;
 
 import static br.com.certificatevalid.util.Constants.NOT_BLANK;

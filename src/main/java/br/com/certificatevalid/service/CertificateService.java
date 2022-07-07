@@ -6,8 +6,6 @@ import br.com.certificatevalid.model.Certificate;
 import br.com.certificatevalid.model.Course;
 import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.repository.CertificateRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +18,7 @@ public class CertificateService extends BaseService {
     private VerificationCodeService verificationCodeService;
     @Autowired
     private CertificateRepository repository;
-    @Autowired
-    private ModelMapper modelMapper;
+
 
     public ResponseEntity<CertificateOutDto> persist(CertificateInDto dto) {
         User user = findUser(dto.getUserId());

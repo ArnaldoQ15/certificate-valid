@@ -18,12 +18,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.Locale;
 
 import static br.com.certificatevalid.enums.CourseDataStatusEnum.ACTIVE;
 import static br.com.certificatevalid.util.Constants.*;
-import static java.time.OffsetDateTime.*;
+import static java.time.OffsetDateTime.now;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -34,6 +33,7 @@ public class CourseService extends BaseService {
     private CourseRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
 
     public ResponseEntity<CourseOutDto> persist(CourseInDto dto) {
         if (Boolean.TRUE.equals(repository.existsByTitle(dto.getTitle().toLowerCase(Locale.ROOT))))
@@ -47,7 +47,6 @@ public class CourseService extends BaseService {
                 .dataStatus(ACTIVE)
                 .finishDate(dto.getFinishDate())
                 .build();
-
         repository.save(entityNew);
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(entityNew, CourseOutDto.class));
     }
@@ -59,7 +58,6 @@ public class CourseService extends BaseService {
         Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("title").ascending());
         Page<Course> courses = isNull(parameterFind.getName()) || parameterFind.getName().isBlank() ? repository.findAll(pageRequest) :
                 repository.findByTitle(parameterFind.getName().toLowerCase(Locale.ROOT), pageRequest);
-
         return ResponseEntity.ok(courses.map(course -> modelMapper.map(course, CourseOutDto.class)));
     }
 
@@ -77,7 +75,6 @@ public class CourseService extends BaseService {
         course.setTitle(isNull(dto.getTitle()) ? course.getTitle() : dto.getTitle());
         course.setDescription(isNull(dto.getDescription()) ? course.getDescription() : dto.getDescription());
         course.setFinishDate(isNull(dto.getFinishDate()) ? course.getFinishDate() : dto.getFinishDate());
-
         repository.save(course);
         return ResponseEntity.ok(modelMapper.map(course, CourseOutDto.class));
     }

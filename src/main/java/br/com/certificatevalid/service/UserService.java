@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import static br.com.certificatevalid.enums.DataStatusEnum.*;
 import static br.com.certificatevalid.util.Constants.*;
-import static java.util.Objects.*;
+import static java.util.Objects.isNull;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Service
@@ -78,7 +78,6 @@ public class UserService extends BaseService {
         Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("username").ascending());
         Page<User> user = isNull(parameterFind.getName()) || parameterFind.getName().isBlank() ? repository.findAll(pageRequest) :
                 repository.findByUsername(parameterFind.getName().toLowerCase(Locale.ROOT), pageRequest);
-
         return ResponseEntity.ok(user.map(userRequest -> modelMapper.map(userRequest, UserOutDto.class)));
     }
 
@@ -107,7 +106,6 @@ public class UserService extends BaseService {
 
         if(!matches)
             throw new BadRequestException(WEAK_PASSWORD);
-
         return sha256Hex(password);
     }
 

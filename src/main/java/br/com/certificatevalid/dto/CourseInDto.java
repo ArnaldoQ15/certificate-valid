@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import java.time.OffsetDateTime;
 
 import static br.com.certificatevalid.util.Constants.NOT_BLANK;
