@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,5 +21,7 @@ public class UserUpdateDto {
     private String email;
 
     private DataStatusEnum dataStatus;
+
+    private List<UserAddressUpdateDto> addresses;
 
 }

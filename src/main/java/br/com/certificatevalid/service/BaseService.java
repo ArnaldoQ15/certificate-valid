@@ -4,8 +4,10 @@ import br.com.certificatevalid.exception.NotFoundException;
 import br.com.certificatevalid.model.Company;
 import br.com.certificatevalid.model.Course;
 import br.com.certificatevalid.model.User;
+import br.com.certificatevalid.model.UserAddress;
 import br.com.certificatevalid.repository.CompanyRepository;
 import br.com.certificatevalid.repository.CourseRepository;
+import br.com.certificatevalid.repository.UserAddressRepository;
 import br.com.certificatevalid.repository.UserRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class BaseService {
     private CompanyRepository companyRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private UserAddressRepository userAddressRepository;
 
 
     /**Método para encontrar um user no banco de dados a partir do ID.*/
@@ -71,6 +75,14 @@ public class BaseService {
         if (Boolean.TRUE.equals(courseRepository.existsByCourseVerificationCode(code)))
             generateCourseVerificationCode();
         return code;
+    }
+
+    /**Método para encontrar um address no banco de dados a partir do ID.*/
+    public UserAddress findAddress(Long addressId) {
+        Optional<UserAddress> address = userAddressRepository.findById(addressId);
+        if (address.isEmpty())
+            throw new NotFoundException(ADDRESS_NOT_FOUND);
+        return address.get();
     }
 
 }

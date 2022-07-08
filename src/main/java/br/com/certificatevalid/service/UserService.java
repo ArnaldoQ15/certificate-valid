@@ -5,6 +5,7 @@ import br.com.certificatevalid.exception.BadRequestException;
 import br.com.certificatevalid.model.Company;
 import br.com.certificatevalid.model.User;
 import br.com.certificatevalid.repository.CompanyRepository;
+import br.com.certificatevalid.repository.UserAddressRepository;
 import br.com.certificatevalid.repository.UserRepository;
 import br.com.certificatevalid.util.ParameterFind;
 import net.bytebuddy.utility.RandomString;
@@ -35,16 +36,21 @@ public class UserService extends BaseService {
     @Autowired
     private CompanyRepository companyRepository;
     @Autowired
+    private UserAddressRepository userAddressRepository;
+    @Autowired
     private CompanyService companyService;
+    @Autowired
+    private UserAddressService userAddressService;
     @Autowired
     private ModelMapper modelMapper;
 
 
     public ResponseEntity<UserOutDto> persist(UserInDto dto) {
-        User entityNew = modelMapper.map(dto, User.class);
+//        validateCpfExists(dto.getDocumentCpf());
+//        validateEmailExists(dto.getEmail());
 
-        validateCpfExists(entityNew.getDocumentCpf());
-        validateEmailExists(entityNew.getEmail());
+        User entityNew = modelMapper.map(dto, User.class);
+        entityNew.setAddresses(userAddressService.convertAddressInDtoListToEntity(dto.getAddresses()));
         entityNew.setPassword(validPassword(entityNew.getPassword()));
         entityNew.setDataStatus(ACTIVE);
         entityNew.setUserVerificationCode(generateUserVerificationCode() + generateUserVerificationCode());
@@ -78,6 +84,8 @@ public class UserService extends BaseService {
         Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("username").ascending());
         Page<User> user = isNull(parameterFind.getName()) || parameterFind.getName().isBlank() ? repository.findAll(pageRequest) :
                 repository.findByUsername(parameterFind.getName().toLowerCase(Locale.ROOT), pageRequest);
+
+        user.forEach(userFind -> userFind.setAddresses(userAddressRepository.findByUserId(userFind.getUserId())));
         return ResponseEntity.ok(user.map(userRequest -> modelMapper.map(userRequest, UserOutDto.class)));
     }
 
@@ -91,6 +99,7 @@ public class UserService extends BaseService {
         user.setUsername(isNull(dto.getUsername()) ? user.getUsername() : dto.getUsername());
         user.setPassword(isNull(dto.getPassword()) ? user.getPassword() : validPassword(dto.getPassword()));
         user.setDataStatus(isNull(dto.getDataStatus()) ? user.getDataStatus() : dto.getDataStatus());
+        user.setAddresses(isNull(dto.getAddresses()) ? user.getAddresses() : userAddressService.updateUserAddress(dto.getAddresses()));
         return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(repository.save(user), UserOutDto.class));
     }
 

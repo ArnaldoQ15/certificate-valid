@@ -6,8 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 import static br.com.certificatevalid.util.Constants.*;
 
@@ -32,5 +35,9 @@ public class UserInDto {
     @NotBlank(message = NOT_BLANK)
     @Email(message = EMAIL_INVALID)
     private String email;
+
+    @NotEmpty(message = NOT_BLANK)
+    @Valid
+    private List<UserAddressInDto> addresses;
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 import static br.com.certificatevalid.util.Constants.*;
 
@@ -48,5 +49,9 @@ public class User {
 
     @NotNull(message = NOT_BLANK)
     private String userVerificationCode;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    private List<UserAddress> addresses;
 
 }

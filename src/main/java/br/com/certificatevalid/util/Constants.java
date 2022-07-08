@@ -19,5 +19,7 @@ public class Constants {
     public static final String COURSE_EXPIRED = "Course expired. Cant update.";
     public static final String INVALID_COURSE_DATE = "You cant change finish to before now.";
     public static final String COURSE_NOT_FOUND = "Course not found.";
+    public static final String INVALID_CEP_LENGHT = "The field must be 8 characters long.";
+    public static final String ADDRESS_NOT_FOUND = "Address not found. Verify if you have the right zip code.";
 
 }
