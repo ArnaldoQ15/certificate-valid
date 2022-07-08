@@ -52,10 +52,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex,
-                                                                  @NotNull HttpHeaders headers,
-                                                                  @NotNull HttpStatus status,
-                                                                  @NotNull WebRequest request) {
+    protected @NotNull ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex,
+                                                                           @NotNull HttpHeaders headers,
+                                                                           @NotNull HttpStatus status,
+                                                                           @NotNull WebRequest request) {
         return new ResponseEntity(ExceptionDto.builder()
                 .status(status)
                 .timestamp(now())
@@ -64,9 +64,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NotNull MethodArgumentNotValidException ex,
-                                                                  @NotNull HttpHeaders headers, @NotNull HttpStatus status,
-                                                                  @NotNull WebRequest request) {
+    protected @NotNull ResponseEntity<Object> handleMethodArgumentNotValid(@NotNull MethodArgumentNotValidException ex,
+                                                                           @NotNull HttpHeaders headers, @NotNull HttpStatus status,
+                                                                           @NotNull WebRequest request) {
         List<ExceptionArgumentNotValidDto.Warnings> warnings = new ArrayList<>();
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
