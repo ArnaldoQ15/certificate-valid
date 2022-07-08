@@ -49,3 +49,16 @@ CREATE TABLE certificate (
         FOREIGN KEY (user_id) REFERENCES user_system(user_id),
         FOREIGN KEY (verification_code_id) REFERENCES verification_code(code_id)
 );
+
+CREATE TABLE user_address (
+        address_id SERIAL PRIMARY KEY,
+        zip_code VARCHAR(255) NOT NULL,
+        street VARCHAR(255) NOT NULL,
+        number VARCHAR(255),
+        complement VARCHAR(255),
+        district VARCHAR(255) NOT NULL,
+        state VARCHAR(2) NOT NULL,
+        city VARCHAR(255) NOT NULL,
+        user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES user_system(user_id)
+);
